@@ -20,6 +20,31 @@ const updateAndSave = function(req, res, document){
   });
 }
 
+const createFilterFromParam = function(req, res){
+
+  var filters = [];
+  for(var property in req.query){
+    if(property && req.query[property]){
+      var newFilter = {};
+      newFilter[property] = req.query[property];
+      filters.push(newFilter);
+    }
+  }
+  if(filters.length > 0)
+    filters = {$and : filters};
+  else
+    filters = {};
+    return filters;
+}
+
+const createUpdaterFromBody = function(req, res){
+  var updater = {};
+  for(var property in req.body){
+    updater[property] = req.body[property];
+  }
+  return updater;
+}
+
 //Generic controller, routing to a model
 var create = function(app, name, model, writable){
   var router = express.Router();
@@ -28,7 +53,8 @@ var create = function(app, name, model, writable){
 
   //List all documents
   router.get("/",    (req,res) => {
-    theModel.find(function(err, documents) {
+    var filters = createFilterFromParam(req, res);
+    theModel.find(filters).lean().exec(function(err, documents) {
       if (err)
         res.send(err);
       else
@@ -61,6 +87,17 @@ var create = function(app, name, model, writable){
           res.send(err);
 
         updateAndSave(req, res, document);
+      });
+    });
+
+    // Update multiple items
+    router.put('/',(req,res) => {
+      var filters = createFilterFromParam(req, res);
+      theModel.update(filters, { $set: createUpdaterFromBody(req, res)}, {multi: true}, function(err, documents) {
+        if (err)
+          res.send(err);
+        else
+          res.json(documents);
       });
     });
   }

@@ -1,0 +1,13 @@
+html
+  head
+    title BiogeniQ - 2018 Hackathon 
+  body
+    h1 Vous cherchez quelque chose?
+    
+    each model, modelName in models
+      a(href="/"+modelName)= modelName + "?"      
+      ul
+        each property, propertyName in model.schema.paths
+          li= propertyName
+      br
+    

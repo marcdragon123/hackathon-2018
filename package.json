@@ -10,8 +10,9 @@
   "author": "",
   "license": "",
   "dependencies": {
+    "body-parser": "*",
     "express": "*",
     "mongoose": "*",
-    "body-parser": "*"
+    "pug": "^2.0.0-rc.4"
   }
 }

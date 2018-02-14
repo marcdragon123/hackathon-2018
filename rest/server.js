@@ -23,8 +23,10 @@ for(var model in models){
   genericControllers.create(app, model, models[model], writable);
 }
 
+console.log("Adding template engine .... ");
+app.set('view engine', 'pug')
 console.log("Adding custom controller .... ");
-app.use('/', require('./controllers/homeController'));
+app.use('/', require('./controllers/home').create(models));
 
 
 //Lets launch the service!
