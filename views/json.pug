@@ -1,7 +1,31 @@
-html
-  head
-    title BiogeniQ - 2018 Hackathon 
-  body
-    h1 Some result
-    p= JSON.stringify(json)
+extends template
+
+block content
+  .card
+    .card-header
+      h3= name
+    .card-block
+      if !json.constructor === Array
+        pre
+          code.json= JSON.stringify(json, null, '  ')
+      else
+        .row
+          each document in json 
+            ul.list-group.list-group-flush
+              each property, propertyName in document
+                li.list-group-item
+                  .row
+                    .col-md-6= propertyName
+                    .col-md-6= JSON.stringify(property, null, '  ')
+                    
     
+  br
+  .accordion
+    .card
+      .card-header
+        h3
+          button.btn.btn-link(data-toggle="collapse" data-target="#schema", aria-expanded="true", aria-controls="schema") Show Schema
+      div.collapse(id="schema", aria-labelledby="schema" data-parent="#accordion")
+        .card-block                  
+          pre
+            code.json= JSON.stringify(schema, null, '  ')

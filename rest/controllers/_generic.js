@@ -1,7 +1,7 @@
 var express = require('express');
 
 //Generic function used both to create or update document
-const updateAndSave = function(req, res, document, view){
+const updateAndSave = function(req, res, name, document, view){
   //cycle through body content to add properties
   for(var property in req.body){
     console.log("Property : " + property + "(" + req.body[property] + ")");
@@ -13,7 +13,7 @@ const updateAndSave = function(req, res, document, view){
     if (err)
       res.send(err);
 
-    sendResponse(req, res,
+    sendResponse(req, res, name,
       { message: "OK",
         document: document
       }, view);
@@ -45,37 +45,51 @@ const createUpdaterFromBody = function(req, res){
   return updater;
 }
 
-const sendResponse = function(req, res, document, view){
-  if(view)
-    res.render('json', {json : document});
-  else
-    res.json(document);
+const createPopulates = function(schema){
+  var populates = [];
+  if(schema["obj"]){
+    for(var property in schema["obj"]){
+      if(schema["obj"][property] && schema["obj"][property].ref)
+        populates.push(property);
+    }
+  }
+  return populates;
 }
 
 //Generic controller, routing to a model
-var createRouter = function(model, writable, viewMode){
+var createRouter = function(modelName, model, writable, viewMode){
   var router = express.Router();
   var theModel = model;
+  var theModelName = modelName;
   var view = viewMode;
+
+  var sendResponse = function(req, res, name, document, view){
+    if(view)
+      res.render('json', {json : document, name : name, schema : theModel.schema});
+    else
+      res.json(document);
+  }
 
   //List all documents
   router.get("/",    (req,res) => {
     var filters = createFilterFromParam(req, res);
-    theModel.find(filters).lean().exec(function(err, documents) {
+    var populates = createPopulates(theModel.schema);
+    theModel.find(filters).populate(populates).lean().exec(function(err, documents) {
       if (err)
         res.send(err);
       else
-        sendResponse(req, res, documents, view);
+        sendResponse(req, res, theModelName, documents, view);
     });
   });
 
   // Fetch specific document
   router.get('/:_id', (req,res) => {
-    theModel.findById(req.params._id, function(err, document) {
+    var populates = createPopulates(theModel.schema);
+    theModel.findById(req.params._id).populate(populates).lean().exec(function(err, document) {
       if (err)
         res.send(err);
       else
-        sendResponse(req, res, document, view);
+        sendResponse(req, res, theModelName, document, view);
     });
   });
 
@@ -83,7 +97,7 @@ var createRouter = function(model, writable, viewMode){
     // Create a new item
     router.post('/',(req,res) => {
       var document = new theModel();      // create a new instance of the model
-      updateAndSave(req, res, document, view);
+      updateAndSave(req, res, theModelName, document, view);
     });
 
 
@@ -93,7 +107,7 @@ var createRouter = function(model, writable, viewMode){
         if (err)
           res.send(err);
 
-        updateAndSave(req, res, document, view);
+        updateAndSave(req, res, theModelName, document, view);
       });
     });
 
@@ -104,7 +118,7 @@ var createRouter = function(model, writable, viewMode){
         if (err)
           res.send(err);
         else
-          sendResponse(req, res, documents, view);
+          sendResponse(req, res, theModelName, documents, view);
       });
     });
   }

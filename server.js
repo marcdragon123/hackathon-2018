@@ -19,11 +19,9 @@ app.use(bodyParser.json());
 app.set('json spaces', 2);
 
 for(var model in models){
-  console.log("Registering model : " + model);
-
-    //Register routes
-  app.use("/json/"+model+"/", genericControllers.createRouter(models[model], writable, false));
-  app.use("/"+model+"/", genericControllers.createRouter(models[model], writable, true));
+  console.log("Registering model : " + model); //Register routes
+  app.use("/json/"+model+"/", genericControllers.createRouter(model, models[model], writable, false));
+  app.use("/html/"+model+"/", genericControllers.createRouter(model, models[model], writable, true));
 }
 
 console.log("Adding template engine .... ");
