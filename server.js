@@ -5,8 +5,8 @@ var app         = express(); // Please do not remove this line, since CLI uses t
 var mongoose    = require('mongoose');
 mongoose.connect("mongodb://localhost:27017/hackathon2018"); // connect to our database
 
-var models              = require('./models/_models'); // Loading all models
-var genericControllers  = require('./controllers/_generic'); // A tool to automate routes for each model
+var models              = require('./rest/models/_models'); // Loading all models
+var genericControllers  = require('./rest/controllers/_generic'); // A tool to automate routes for each model
 
 const writable = true;
 
@@ -20,13 +20,16 @@ app.set('json spaces', 2);
 
 for(var model in models){
   console.log("Registering model : " + model);
-  genericControllers.create(app, model, models[model], writable);
+
+    //Register routes
+  app.use("/json/"+model+"/", genericControllers.createRouter(models[model], writable, false));
+  app.use("/"+model+"/", genericControllers.createRouter(models[model], writable, true));
 }
 
 console.log("Adding template engine .... ");
 app.set('view engine', 'pug')
 console.log("Adding custom controller .... ");
-app.use('/', require('./controllers/home').create(models));
+app.use('/', require('./rest/controllers/home').create(models));
 
 
 //Lets launch the service!

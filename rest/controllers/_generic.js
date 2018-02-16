@@ -1,7 +1,7 @@
 var express = require('express');
 
 //Generic function used both to create or update document
-const updateAndSave = function(req, res, document){
+const updateAndSave = function(req, res, document, view){
   //cycle through body content to add properties
   for(var property in req.body){
     console.log("Property : " + property + "(" + req.body[property] + ")");
@@ -13,10 +13,10 @@ const updateAndSave = function(req, res, document){
     if (err)
       res.send(err);
 
-    res.json(
+    sendResponse(req, res,
       { message: "OK",
         document: document
-      });
+      }, view);
   });
 }
 
@@ -45,11 +45,18 @@ const createUpdaterFromBody = function(req, res){
   return updater;
 }
 
+const sendResponse = function(req, res, document, view){
+  if(view)
+    res.render('json', {json : document});
+  else
+    res.json(document);
+}
+
 //Generic controller, routing to a model
-var create = function(app, name, model, writable){
+var createRouter = function(model, writable, viewMode){
   var router = express.Router();
-  var theName = name;
   var theModel = model;
+  var view = viewMode;
 
   //List all documents
   router.get("/",    (req,res) => {
@@ -58,7 +65,7 @@ var create = function(app, name, model, writable){
       if (err)
         res.send(err);
       else
-        res.json(documents);
+        sendResponse(req, res, documents, view);
     });
   });
 
@@ -68,7 +75,7 @@ var create = function(app, name, model, writable){
       if (err)
         res.send(err);
       else
-        res.json(document);
+        sendResponse(req, res, document, view);
     });
   });
 
@@ -76,7 +83,7 @@ var create = function(app, name, model, writable){
     // Create a new item
     router.post('/',(req,res) => {
       var document = new theModel();      // create a new instance of the model
-      updateAndSave(req, res, document);
+      updateAndSave(req, res, document, view);
     });
 
 
@@ -86,7 +93,7 @@ var create = function(app, name, model, writable){
         if (err)
           res.send(err);
 
-        updateAndSave(req, res, document);
+        updateAndSave(req, res, document, view);
       });
     });
 
@@ -97,12 +104,11 @@ var create = function(app, name, model, writable){
         if (err)
           res.send(err);
         else
-          res.json(documents);
+          sendResponse(req, res, documents, view);
       });
     });
   }
-    //Register routes
-  app.use("/"+name+"/", router);
+  return router;
 }
 
-module.exports = {create : create};
+module.exports = {createRouter : createRouter};
