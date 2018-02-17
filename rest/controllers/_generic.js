@@ -73,7 +73,7 @@ var createRouter = function(modelName, model, writable, viewMode){
   //List all documents
   router.get("/",    (req,res) => {
     var filters = createFilterFromParam(req, res);
-    var populates = createPopulates(theModel.schema);
+    var populates = [];//createPopulates(theModel.schema);
     theModel.find(filters).populate(populates).lean().exec(function(err, documents) {
       if (err)
         res.send(err);

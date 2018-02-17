@@ -3,21 +3,36 @@ extends template
 block content
   .card
     .card-header
-      h3= name
+      h3
+        a(href="/") Home
+        | // 
+        = name
     .card-block
-      if !json.constructor === Array
+      if !(json instanceof Array)
         pre
           code.json= JSON.stringify(json, null, '  ')
-      else
+      else        
         .row
           each document in json 
-            ul.list-group.list-group-flush
-              each property, propertyName in document
-                li.list-group-item
-                  .row
-                    .col-md-6= propertyName
-                    .col-md-6= JSON.stringify(property, null, '  ')
-                    
+            .col-md-6
+              .card
+                .card-header
+                  h4= document.name
+                .card-body
+                  ul.list-group.list-group-flush
+                    each property, propertyName in document
+                      if propertyName != "name" && propertyName != "__v"
+                        li.list-group-item
+                          .row
+                            .col-md-3= propertyName
+                            .col-md-9                              
+                              if propertyName == "_id"
+                                a(href="/html/"+name+"/"+property)= property
+                              else
+                                pre
+                                  code.json= JSON.stringify(property, null, '  ')
+              br
+                      
     
   br
   .accordion
