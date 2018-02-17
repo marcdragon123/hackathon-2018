@@ -4,7 +4,7 @@ var express = require('express');
 const updateAndSave = function(req, res, name, document, view){
   //cycle through body content to add properties
   for(var property in req.body){
-    console.log("Property : " + property + "(" + req.body[property] + ")");
+    // console.log("Property : " + property + "(" + req.body[property] + ")");
     document[property] = req.body[property];
   }
 

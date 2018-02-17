@@ -20,17 +20,19 @@ block content
                   h4= document.name
                 .card-body
                   ul.list-group.list-group-flush
-                    each property, propertyName in document
-                      if propertyName != "name" && propertyName != "__v"
+                    //each property, propertyName in document
+                    each stuff, propertyName in schema.paths
+                      if propertyName != "name" && propertyName != "__v"                        
                         li.list-group-item
                           .row
                             .col-md-3= propertyName
                             .col-md-9                              
                               if propertyName == "_id"
-                                a(href="/html/"+name+"/"+property)= property
+                                a(href="/html/"+name+"/"+document[propertyName])= document[propertyName]
                               else
-                                pre
-                                  code.json= JSON.stringify(property, null, '  ')
+                                = JSON.stringify(document[propertyName], null, '  ')
+                                //- pre
+                                  code.json= JSON.stringify(document[propertyName], null, '  ')
               br
                       
     
