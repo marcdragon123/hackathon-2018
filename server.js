@@ -3,7 +3,7 @@ var bodyParser  = require('body-parser');
 
 var app         = express(); // Please do not remove this line, since CLI uses this line as guidance to import new controllers
 var mongoose    = require('mongoose');
-mongoose.connect("mongodb://localhost:27017/hackathon2018"); // connect to our database
+mongoose.connect("mongodb://localhost:27017/bonqoeur"); // connect to our database hackathon2018
 
 var models              = require('./rest/models/_models'); // Loading all models
 var genericControllers  = require('./rest/controllers/_generic'); // A tool to automate routes for each model

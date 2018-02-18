@@ -3,7 +3,7 @@ const models = {
   phenotypes : require('./Phenotype.js'),
   diplotypes : require('./Diplotype.js'),
   polymorphisms : require('./Polymorphism.js'),
-  variants : require('./Variant.js'),
+  genotypes : require('./Genotype.js'),
 }
 
 module.exports = models;

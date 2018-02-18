@@ -1,16 +1,15 @@
 const mongoose = require('mongoose');
+const Types = mongoose.Schema.Types;
 
 const GeneSchema = mongoose.Schema({
-  name: String,
-  count: Number,
-  fr:{
-    label : String,
-    description : String
-  },
-  en:{
-    label : String,
-    description : String
-  },
+  geneId: { type: String, required: true, initial:true },
+  description: { type: String, required: false, initial:false },
+  description_en: { type: String, required: false, initial:false },
+  phenotypes: [{ type: Types.ObjectId, ref: 'Phenotype', required: false, initial:true, many:true }],
+  SNPs: [{type: String, required: false, initial:false}],
+  mafJSON_fr:{ type: String, required: false, initial:true },
+  mafJSON_en:{ type: String, required: false, initial:true },
+  notes: { type: String, required: false, initial:true }
 });
 
-module.exports = mongoose.model('GeneModel', GeneSchema);
+module.exports = mongoose.model('Gene', GeneSchema);
