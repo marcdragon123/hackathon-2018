@@ -62,6 +62,7 @@ var createRouter = function(modelName, model, writable, viewMode){
   var theModel = model;
   var theModelName = modelName;
   var view = viewMode;
+  var limit = (view ? 20 : null);
 
   var sendResponse = function(req, res, name, document, view){
     if(view)
@@ -72,9 +73,10 @@ var createRouter = function(modelName, model, writable, viewMode){
 
   //List all documents
   router.get("/",    (req,res) => {
+    console.log("GET : " + theModelName);
     var filters = createFilterFromParam(req, res);
     var populates = [];//createPopulates(theModel.schema);
-    theModel.find(filters).populate(populates).lean().exec(function(err, documents) {
+    theModel.find(filters).limit(limit).populate(populates).lean().exec(function(err, documents) {
       if (err)
         res.send(err);
       else

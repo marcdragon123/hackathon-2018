@@ -1,7 +1,10 @@
 var express     = require('express');
+var cors        = require('cors');
 var bodyParser  = require('body-parser');
 
 var app         = express(); // Please do not remove this line, since CLI uses this line as guidance to import new controllers
+app.use(cors());
+
 var mongoose    = require('mongoose');
 mongoose.connect("mongodb://localhost:27017/bonqoeur"); // connect to our database hackathon2018
 

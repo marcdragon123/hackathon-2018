@@ -11,6 +11,7 @@
   "license": "",
   "dependencies": {
     "body-parser": "*",
+    "cors": "^2.8.4",
     "express": "*",
     "mongoose": "*",
     "pug": "^2.0.0-rc.4"

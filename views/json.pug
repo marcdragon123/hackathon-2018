@@ -17,7 +17,12 @@ block content
             .col-md-6
               .card
                 .card-header
-                  h4= document.name
+                  - var docName = document.code;
+                  if !docName
+                    - docName = document.geneId;
+                  if !docName
+                    - docName = document.snpRS;
+                  h4= docName
                 .card-body
                   ul.list-group.list-group-flush
                     //each property, propertyName in document
