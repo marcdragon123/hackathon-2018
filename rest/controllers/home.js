@@ -5,12 +5,11 @@ var qadna   = require('../lib/qadna');
 var create = function(models){
   var router = express.Router();
 
-  // get /api/gene/
   router.get('/',(req,res) => {
-    res.render('home', {models : models});
+    res.render('landing', {models : models});
   });
 
-  router.post('/',(req,res) => {
+  router.post('/createRandomPatient',(req,res) => {
     //patient info : name, birth, gender
     var info = {};
     //cycle through body content to add properties
@@ -18,7 +17,7 @@ var create = function(models){
       info[property] = req.body[property];
     }
     qadna.createRandomPatient(info, function(patient){
-      res.render('home', {models : models});
+      res.render('json', {json : patient, name : patient.name, schema : models.patients.schema});
     });
   });
   return router;

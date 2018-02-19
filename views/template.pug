@@ -1,13 +1,50 @@
 html
   head
     script(src="//code.jquery.com/jquery-3.3.1.slim.min.js")
+    link(rel="stylesheet", href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai.min.css")      
+    script(src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js")    
+    
     link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js")
     
-    link(rel="stylesheet", href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai.min.css")
-    script(src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js")    
+    
     script.
       hljs.initHighlightingOnLoad();
+      
     title BiogeniQ - 2018 Hackathon 
-  body
+    style(type='text/css').
+      html {
+        font-size: 14px;
+      }
+      @media (min-width: 768px) {
+        html {
+          font-size: 16px;
+        }
+      }
+
+      .container {
+        max-width: 960px;
+      }
+
+      .pricing-header {
+        max-width: 700px;
+      }
+
+      .card-deck .card {
+        min-width: 220px;
+      }
+
+      .border-top { border-top: 1px solid #e5e5e5; }
+      .border-bottom { border-bottom: 1px solid #e5e5e5; }
+
+      .box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+      
+  body    
+    div.d-flex.flex-column.flex-md-row.align-items-center.p-3.px-md-4.mb-3.bg-white.border-bottom.box-shadow
+      h5.my-0.mr-md-auto.font-weight-normal 
+        a(href="/") BiogeniQ
+      nav.my-2.my-md-0.mr-md-3
+        a.p-2.text-dark(href="/html/patients/5a89dd7747c05f1a7b81f0a5") Example #1
+        a.p-2.text-dark(href="/html/patients/?pharmacogenetics=56292cafa4ba5975e175ef68&gender=male") Exemple #2
+      a.btn.btn-outline-primary(href="https://github.com/biogeniq/hackathon-2018") Sources (GitHub)
     block content

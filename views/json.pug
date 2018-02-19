@@ -1,53 +1,48 @@
 extends template
 
-block content
-  .card
-    .card-header
-      h3
-        a(href="/") Home
-        | // 
-        = name
-    .card-block
-      if !(json instanceof Array)
-        pre
-          code.json= JSON.stringify(json, null, '  ')
-      else        
-        .row
-          each document in json 
-            .col-md-6
-              .card
-                .card-header
-                  - var docName = document.code;
-                  if !docName
-                    - docName = document.geneId;
-                  if !docName
-                    - docName = document.snpRS;
-                  h4= docName
-                .card-body
-                  ul.list-group.list-group-flush
-                    //each property, propertyName in document
-                    each stuff, propertyName in schema.paths
-                      if propertyName != "name" && propertyName != "__v"                        
-                        li.list-group-item
-                          .row
-                            .col-md-3= propertyName
-                            .col-md-9                              
-                              if propertyName == "_id"
-                                a(href="/html/"+name+"/"+document[propertyName])= document[propertyName]
-                              else
-                                = JSON.stringify(document[propertyName], null, '  ')
-                                //- pre
-                                  code.json= JSON.stringify(document[propertyName], null, '  ')
-              br
+block content  
+  .container-fluid    
+    if !(json instanceof Array)
+      p.lead= name
+      pre
+        code.json= JSON.stringify(json, null, '  ')
+    else
+      p.lead= name + " (20 premiers)"
+      .row
+        each document in json 
+          .col-md-6
+            .card
+              .card-header
+                - var docName = document.code;
+                if !docName
+                  - docName = document.geneId;
+                if !docName
+                  - docName = document.snpRS;
+                h4= docName
+              .card-body
+                ul.list-group.list-group-flush
+                  //each property, propertyName in document
+                  each stuff, propertyName in schema.paths
+                    if propertyName != "name" && propertyName != "__v"                        
+                      li.list-group-item
+                        .row
+                          .col-md-4= propertyName
+                          .col-md-8                              
+                            if propertyName == "_id"
+                              a(href="/html/"+name+"/"+document[propertyName])= document[propertyName]
+                            else
+                              = JSON.stringify(document[propertyName], null, '  ')
+                              //- pre
+                                code.json= JSON.stringify(document[propertyName], null, '  ')
+            br
                       
-    
-  br
-  .accordion
-    .card
-      .card-header
-        h3
-          button.btn.btn-link(data-toggle="collapse" data-target="#schema", aria-expanded="true", aria-controls="schema") Show Schema
-      div.collapse(id="schema", aria-labelledby="schema" data-parent="#accordion")
-        .card-block                  
-          pre
-            code.json= JSON.stringify(schema, null, '  ')
+    br
+    .accordion
+      .card
+        .card-header
+          h3
+            button.btn.btn-link(data-toggle="collapse" data-target="#schema", aria-expanded="true", aria-controls="schema") Afficher le Schema
+        div.collapse(id="schema", aria-labelledby="schema" data-parent="#accordion")
+          .card-block                  
+            pre
+              code.json= JSON.stringify(schema, null, '  ')

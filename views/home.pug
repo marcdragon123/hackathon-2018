@@ -4,16 +4,18 @@ block content
   h1 Vous cherchez quelque chose?
   .row
     each model, modelName in models
-      .col-md-4  
+      .col-md-4.accordion        
         .card
-          .card-header
+          .card-header            
             a(href="/html/"+modelName)= modelName
             |  (
             a(href="/json/"+modelName) json
             | )
-          .card-block
-            ul
-              each property, propertyName in model.schema.paths
-                if propertyName != "__v"
-                  li= propertyName
+            button.btn.btn-link(data-toggle="collapse" data-target="#"+modelName, aria-expanded="true", aria-controls=modelName) +
+          div.collapse(id=modelName, aria-labelledby=modelName data-parent="#accordion")
+            .card-block
+              ul
+                each property, propertyName in model.schema.paths
+                  if propertyName != "__v"
+                    li= propertyName
         br
