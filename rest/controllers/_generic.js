@@ -100,8 +100,12 @@ var createRouter = function(modelName, model, writable, viewMode){
     theModel.findById(req.params._id).populate(populates).lean().exec(function(err, document) {
       if (err)
         res.send(err);
-      else
-        sendResponse(req, res, theModelName, document[req.params._property], view);
+      else{
+        if(document && req.params._property)
+          sendResponse(req, res, theModelName, document[req.params._property], view);
+        else
+          sendResponse(req, res, theModelName, {}, view);
+      }
     });
   });
 
