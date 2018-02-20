@@ -11,7 +11,7 @@ mongoose.connect("mongodb://localhost:27017/bonqoeur"); // connect to our databa
 var models              = require('./rest/models/_models'); // Loading all models
 var genericControllers  = require('./rest/controllers/_generic'); // A tool to automate routes for each model
 
-const writable = true;
+const writable = false;
 
 console.log("------ Hackathon 2018 ------");
 console.log("Launch sequence initiated .... ");

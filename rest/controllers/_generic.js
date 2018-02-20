@@ -12,11 +12,10 @@ const updateAndSave = function(req, res, name, document, view){
   document.save(function(err) {
     if (err)
       res.send(err);
-
-    sendResponse(req, res, name,
-      { message: "OK",
-        document: document
-      }, view);
+    if(view)
+      res.render('json', {json : { message: "OK", document: document }, name : name, schema : {}});
+    else
+      res.json(document);
   });
 }
 
@@ -92,6 +91,17 @@ var createRouter = function(modelName, model, writable, viewMode){
         res.send(err);
       else
         sendResponse(req, res, theModelName, document, view);
+    });
+  });
+
+  // Fetch specific document and return a specific property
+  router.get('/:_id/:_property', (req,res) => {
+    var populates = createPopulates(theModel.schema);
+    theModel.findById(req.params._id).populate(populates).lean().exec(function(err, document) {
+      if (err)
+        res.send(err);
+      else
+        sendResponse(req, res, theModelName, document[req.params._property], view);
     });
   });
 
