@@ -13,6 +13,9 @@ const RPQxSchema = mongoose.Schema({
   // categories:{ type: Types.Relationship, ref: 'Category', required: true, initial:true, many:true },
   count: { type: Number, required: false, initial:false, default: 0 },
   drug: { type: Types.ObjectId, ref: 'Drug', required: true, initial:true },
+},{
+  strict: true,
+  strictQuery: true // Turn on strict mode for query filters
 });
 
 module.exports = mongoose.model('RecommendationPQx', RPQxSchema);

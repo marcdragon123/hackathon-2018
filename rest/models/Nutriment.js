@@ -13,6 +13,9 @@ const NutrimentSchema = mongoose.Schema({
   label: { type: String, required: false, initial:true },
   tagLine: { type: String, required: false, initial:true },
   premiseClient: { type: String, html:true, wysiwyg:true, required: false , initial:true}
+},{
+  strict: true,
+  strictQuery: true // Turn on strict mode for query filters
 });
 
 module.exports = mongoose.model('Nutriment', NutrimentSchema);

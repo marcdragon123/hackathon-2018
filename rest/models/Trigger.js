@@ -10,6 +10,9 @@ const TriggerSchema = mongoose.Schema({
   outputGenotypes: [{ type: Types.ObjectId, ref: 'Genotype', required: false, initial:true, many:true}],
   count: { type: Number, required: false, initial:false, default: 0 },
   isApproved: { type: Boolean, required: false, initial:true, noedit:true },
+},{
+  strict: true,
+  strictQuery: true // Turn on strict mode for query filters
 });
 
 module.exports = mongoose.model('Trigger', TriggerSchema);

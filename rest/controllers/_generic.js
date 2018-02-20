@@ -46,12 +46,12 @@ const createUpdaterFromBody = function(req, res){
 
 const createPopulates = function(schema){
   var populates = [];
-  if(schema["obj"]){
-    for(var property in schema["obj"]){
-      if(schema["obj"][property] && schema["obj"][property].ref)
-        populates.push(property);
-    }
-  }
+  // if(schema["obj"]){
+  //   for(var property in schema["obj"]){
+  //     if(schema["obj"][property] && schema["obj"][property].ref)
+  //       populates.push(property);
+  //   }
+  // }
   return populates;
 }
 
@@ -75,7 +75,7 @@ var createRouter = function(modelName, model, writable, viewMode){
     console.log("GET : " + theModelName);
     var filters = createFilterFromParam(req, res);
     var populates = [];//createPopulates(theModel.schema);
-    theModel.find(filters).limit(limit).populate(populates).lean().exec(function(err, documents) {
+    theModel.find(filters).limit(limit).populate(populates).select(Object.keys(theModel.schema.paths)).lean().exec(function(err, documents) {
       if (err)
         res.send(err);
       else
@@ -86,7 +86,7 @@ var createRouter = function(modelName, model, writable, viewMode){
   // Fetch specific document
   router.get('/:_id', (req,res) => {
     var populates = createPopulates(theModel.schema);
-    theModel.findById(req.params._id).populate(populates).lean().exec(function(err, document) {
+    theModel.findById(req.params._id).populate(populates).select(Object.keys(theModel.schema.paths)).lean().exec(function(err, document) {
       if (err)
         res.send(err);
       else
@@ -97,7 +97,7 @@ var createRouter = function(modelName, model, writable, viewMode){
   // Fetch specific document and return a specific property
   router.get('/:_id/:_property', (req,res) => {
     var populates = createPopulates(theModel.schema);
-    theModel.findById(req.params._id).populate(populates).lean().exec(function(err, document) {
+    theModel.findById(req.params._id).populate(populates).select(Object.keys(theModel.schema.paths)).lean().exec(function(err, document) {
       if (err)
         res.send(err);
       else{

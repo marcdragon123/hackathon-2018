@@ -13,6 +13,9 @@ const RNQxSchema = mongoose.Schema({
   // categories:{ type: Types.ObjectId, ref: 'Category', required: true, initial:true, many:true },
   count: { type: Number, required: false, initial:false, default: 0 },
   nutriment: { type: Types.ObjectId, ref: 'Nutriment', required: true, initial:true },
+},{
+  strict: true,
+  strictQuery: true // Turn on strict mode for query filters
 });
 
 module.exports = mongoose.model('RecommendationNQx', RNQxSchema);

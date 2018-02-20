@@ -19,6 +19,9 @@ const VariantSchema = mongoose.Schema({
   count: { type: Number, required: false, initial:false, default: 0 },
   isFailed:{ type: Boolean, required: false, initial:true},
   isLabSpecific:{ type: Boolean, required: false, initial:true}
+},{
+  strict: true,
+  strictQuery: true // Turn on strict mode for query filters
 });
 
 module.exports = mongoose.model('Genotype', VariantSchema);

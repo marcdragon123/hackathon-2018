@@ -11,6 +11,9 @@ const PhenotypeSchema = mongoose.Schema({
   texte_en_client	: { type: String, required: false, initial:true },
   activityScore: { type: Number, required: false, initial:true },
   notes: { type: String, required: false, initial:true }
+},{
+  strict: true,
+  strictQuery: true // Turn on strict mode for query filters
 });
 
 module.exports = mongoose.model('Phenotype', PhenotypeSchema);

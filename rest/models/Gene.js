@@ -10,6 +10,9 @@ const GeneSchema = mongoose.Schema({
   mafJSON_fr:{ type: String, required: false, initial:true },
   mafJSON_en:{ type: String, required: false, initial:true },
   notes: { type: String, required: false, initial:true }
+},{
+  strict: true,
+  strictQuery: true // Turn on strict mode for query filters
 });
 
 module.exports = mongoose.model('Gene', GeneSchema);

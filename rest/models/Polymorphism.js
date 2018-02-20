@@ -38,6 +38,9 @@ const PolymorphismSchema = mongoose.Schema({
   // panels: { type: Types.Relationship, ref: 'Panel', required: false, initial:true, many:true },
   notes: { type: String, required: false, initial:true },
   details: { type: String, wysiwyg:true, required: false , initial:true}
+},{
+  strict: true,
+  strictQuery: true // Turn on strict mode for query filters
 });
 
 module.exports = mongoose.model('Polymorphism', PolymorphismSchema);
