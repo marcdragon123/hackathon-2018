@@ -1,0 +1,57 @@
+extends template
+
+block content  
+  .container-fluid    
+    p.lead= name + " (100 premiers)"
+    table.table
+      thead         
+        th(scope="col") ID
+        each stuff, propertyName in schema.paths
+          if propertyName != "name" && propertyName != "__v" && propertyName != "_id"                  
+            th(scope="col")= propertyName
+      tbody
+        each document in json           
+          - var docName = document.code;
+          if !docName
+            - docName = document.geneId;
+          if !docName
+            - docName = document.snpRS;
+          if !docName 
+            - docName = document.name;
+          if !docName 
+            - docName = document._id;
+          tr
+            th(scope="row")
+              a(href="/html/"+name+"/"+document._id)= docName
+            each stuff, propertyName in schema.paths
+              if propertyName != "name" && propertyName != "__v" && propertyName != "_id"
+                if !(document[propertyName] instanceof Array)
+                  if document[propertyName]
+                    if !(document[propertyName]._id)
+                      td!= document[propertyName]
+                    else
+                      - var propName = document.code;
+                      if !propName
+                        - propName = document.geneId;
+                      if !propName
+                        - propName = document.snpRS;
+                      if !propName 
+                        - propName = document.name;
+                      if !propName 
+                        - propName = document._id;
+                      td
+                        a(href="/html/"+propertyName+"s/"+document[propertyName]._id)= propName
+                  else
+                    td -
+                else
+                  td= "[" + document[propertyName].length + " éléments]"
+    br
+    .accordion
+      .card
+        .card-header
+          h3
+            button.btn.btn-link(data-toggle="collapse" data-target="#schema", aria-expanded="true", aria-controls="schema") Afficher le Schema
+        div.collapse(id="schema", aria-labelledby="schema" data-parent="#accordion")
+          .card-block                  
+            pre
+              code.json= JSON.stringify(schema, null, '  ')

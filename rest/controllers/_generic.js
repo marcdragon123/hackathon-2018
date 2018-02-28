@@ -61,11 +61,15 @@ var createRouter = function(modelName, model, writable, viewMode){
   var theModel = model;
   var theModelName = modelName;
   var view = viewMode;
-  var limit = (view ? 20 : null);
+  var limit = (view ? 100 : null);
 
   var sendResponse = function(req, res, name, document, view){
-    if(view)
-      res.render('json', {json : document, name : name, schema : theModel.schema});
+    if(view){
+      if (!(document instanceof Array))
+        res.render('json', {json : document, name : name, schema : theModel.schema});
+      else
+        res.render('table', {json : document, name : name, schema : theModel.schema});
+    }
     else
       res.json(document);
   }

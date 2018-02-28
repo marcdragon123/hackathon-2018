@@ -1,42 +1,20 @@
 extends template
+include mixin/properties.pug
 
 block content  
   .container-fluid    
-    if !(json instanceof Array)
-      p.lead= name
-      pre
-        code.json= JSON.stringify(json, null, '  ')
-    else
-      p.lead= name + " (20 premiers)"
-      .row
-        each document in json 
-          .col-md-6
-            .card
-              .card-header
-                - var docName = document.code;
-                if !docName
-                  - docName = document.geneId;
-                if !docName
-                  - docName = document.snpRS;
-                h4= docName
-              .card-body
-                ul.list-group.list-group-flush
-                  //each property, propertyName in document
-                  each stuff, propertyName in schema.paths
-                    if propertyName != "name" && propertyName != "__v"                        
-                      li.list-group-item
-                        .row
-                          .col-md-4= propertyName
-                          .col-md-8                              
-                            if propertyName == "_id"
-                              a(href="/html/"+name+"/"+document[propertyName])= document[propertyName]
-                            else
-                              = JSON.stringify(document[propertyName], null, '  ')
-                              //- pre
-                                code.json= JSON.stringify(document[propertyName], null, '  ')
-            br
-                      
-    br
+    +properties(json, schema, name)
+    
+    .accordion
+      .card
+        .card-header
+          h3
+            button.btn.btn-link(data-toggle="collapse" data-target="#jsonS", aria-expanded="true", aria-controls="jsonS") JSON.stringify
+        div.collapse(id="jsonS", aria-labelledby="jsonS" data-parent="#accordion")
+          .card-block                  
+            pre
+              code.json= JSON.stringify(json, null, '  ')
+    
     .accordion
       .card
         .card-header

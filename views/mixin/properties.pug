@@ -1,0 +1,62 @@
+mixin properties(document, schema, name)
+  .card
+    .card-header
+      - var docName = document.code;
+      if !docName
+        - docName = document.geneId;
+      if !docName
+        - docName = document.snpRS;
+      if !docName 
+        - docName = document.name;
+      if !docName 
+        - docName = document._id;
+      h4= docName
+        .lead= name
+    .card-body
+      ul.list-group.list-group-flush
+        //each property, propertyName in document
+        each stuff, propertyName in schema.paths
+          if propertyName != "name" && propertyName != "__v"                        
+            li.list-group-item
+              .row
+                .col-md-4= propertyName
+                .col-md-8       
+                  if document[propertyName]
+                    if propertyName == "_id"
+                      a(href="/html/"+name+"/"+document[propertyName])= document[propertyName]
+                    else
+                      if !(document[propertyName] instanceof Array)                      
+                        if document[propertyName]._id
+                          - var propName = document[propertyName].code;
+                          if !propName
+                            - propName = document[propertyName].geneId;
+                          if !propName
+                            - propName = document[propertyName].snpRS;
+                          if !propName 
+                            - propName = document[propertyName].name;
+                          if !propName 
+                            - propName = document[propertyName]._id;
+                          a(href="/html/"+propertyName+"s/"+document[propertyName]._id)= propName
+                          |  
+                        else
+                          = JSON.stringify(document[propertyName], null, '  ')
+                      else
+                        each item, index in document[propertyName]
+                          if item._id
+                            - var propName = item.code;
+                            if !propName
+                              - propName = item.geneId;
+                            if !propName
+                              - propName = item.snpRS;
+                            if !propName 
+                              - propName = item.name;
+                            if !propName 
+                              - propName = item._id;
+                            a(href="/html/"+propertyName+"/"+item._id)= propName
+                            |  
+                          else
+                            if item.toString().length == 24 || item.toString().length == 26
+                              a(href="/html/"+propertyName+"/"+item)= item
+                              |  
+                            else
+                              = JSON.stringify(item, null, '  ')

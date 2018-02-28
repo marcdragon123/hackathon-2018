@@ -4,27 +4,28 @@ block content
   div.pricing-header.px-3.py-3.pt-md-5.pb-md-4.mx-auto.text-center
     h1.display-6 BiogeniQ-API : Hackathon 2018
     p.lead Vous naviguez présentement sur l'API de BiogeniQ. Félicitation, vous avez trouvé la page d'acceuil. Trouverez vous tous les éléments cachés?
-  div.container    
+  div.container-fluid
     .card-deck.mb-3.text-center
       each model, modelName in models
         .col-md-4.accordion        
           .card.md-4.box-shadow
-            .card-header           
-              h4.my-0.font-weight-normal= modelName                
-            .card-body
-              h1.card-title.pricing-card-title
-                button.btn.btn-link(data-toggle="collapse" data-target="#"+modelName, aria-expanded="true", aria-controls=modelName) Propriétées >>
-              div.collapse(id=modelName, aria-labelledby=modelName data-parent="#accordion")              
-                ul.list-unstyled.mt-3.mb-4
-                  each property, propertyName in model.schema.paths
-                    if propertyName != "__v"
-                      li= propertyName
-                .mb-2.text-center
+            .card-header   
+              .row
+                .col-md-7
+                  h4.my-0.font-weight-normal= modelName  
+                    button.btn.btn-link(data-toggle="collapse" data-target="#"+modelName, aria-expanded="true", aria-controls=modelName) >>                        
+                .col-md-5
                   button.btn.btn-md.btn-body.btn-outline-primary(type="button")
                     a(href='/html/'+modelName, style="color:darkblue") html
                   span 
                   button.btn.btn-md.btn-body.btn-primary(type="button")
-                    a(href='/json/'+modelName, style="color:white") json
+                    a(href='/json/'+modelName, style="color:white") json            
+            div.collapse(id=modelName, aria-labelledby=modelName data-parent="#accordion")              
+              .card-body
+                ul.list-unstyled.mt-3.mb-4
+                  each property, propertyName in model.schema.paths
+                    if propertyName != "__v"
+                      li= propertyName
             
     footer.pt-4.my-md-5.pt-md-5.border-top
             
