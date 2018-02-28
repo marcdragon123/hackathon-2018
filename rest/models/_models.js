@@ -1,6 +1,7 @@
 const models = {
   patients : require('./Patient.js'),
   genes : require('./Gene.js'),
+  relatedgenes : require('./Gene.js'),
   phenotypes : require('./Phenotype.js'),
   diplotypes : require('./Diplotype.js'),
   polymorphisms : require('./Polymorphism.js'),

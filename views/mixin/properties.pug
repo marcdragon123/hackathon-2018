@@ -39,7 +39,7 @@ mixin properties(document, schema, name)
                           a(href="/html/"+propertyName+"s/"+document[propertyName]._id)= propName
                           |  
                         else
-                          = JSON.stringify(document[propertyName], null, '  ')
+                          != document[propertyName]
                       else
                         each item, index in document[propertyName]
                           if item._id
@@ -59,4 +59,4 @@ mixin properties(document, schema, name)
                               a(href="/html/"+propertyName+"/"+item)= item
                               |  
                             else
-                              = JSON.stringify(item, null, '  ')
+                              != item

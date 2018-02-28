@@ -21,7 +21,24 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.set('json spaces', 2);
 
+var displayedModels = {
+  patients : true,
+  genes : true,
+  phenotypes : true,
+  diplotypes : true,
+  genotypes : true,
+  polymorphisms : true,
+  activations : true,
+  bioinformatics : true,
+  drugs : true,
+  nutriments : true,
+  pharmacogenetics : true,
+  nutrigenomics : true
+};
+
 for(var model in models){
+  if(displayedModels[model])
+    displayedModels[model] = models[model];
   console.log("Registering model : " + model); //Register routes
   app.use("/json/"+model+"/", genericControllers.createRouter(model, models[model], writable, false));
   app.use("/html/"+model+"/", genericControllers.createRouter(model, models[model], writable, true));
@@ -30,7 +47,7 @@ for(var model in models){
 console.log("Adding template engine .... ");
 app.set('view engine', 'pug')
 console.log("Adding custom controller .... ");
-app.use('/', require('./rest/controllers/home').create(models));
+app.use('/', require('./rest/controllers/home').create(displayedModels));
 
 
 //Lets launch the service!
