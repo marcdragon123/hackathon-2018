@@ -191,6 +191,53 @@ models.actitypes.find().populate("genotypes").lean().exec(function(err, document
   }
 });
 
+var triggerStatic = [];
+var hashTrigger = {};
+models.bioinformatics.find().populate("inputGenotypes").exec(function(err, documents){
+  if(err)
+    console.log(err);
+  triggerStatic = documents;
+  for(var i = 0; i < documents.length; i++){
+    hashTrigger[documents[i]._id.toString()] = documents[i];
+  }
+});
+
+var createRandomGenotypesFromTriggers = module.exports.createRandomGenotypesFromTriggers = function(callback){
+  var actiGeneHash = {};
+  for(var iS = 0; iS < triggerStatic.length; iS++){
+    var gene = "";
+    for(var iG = 0; iG < triggerStatic[iS].inputGenotypes.length; iG++){
+      if(triggerStatic[iS].inputGenotypes[iG].geneID)
+        gene = triggerStatic[iS].inputGenotypes[iG].geneID;
+    }
+    if(!actiGeneHash[gene]){
+      actiGeneHash[gene] = [];
+      // console.log("gene : " + gene);
+    }
+    actiGeneHash[gene].push(triggerStatic[iS]);
+  }
+
+  var genotypes = [];
+  var genoHash = {};
+  var rsHash = {};
+  for(var gene in actiGeneHash){
+    var acti = actiGeneHash[gene][Math.floor((Math.random() * actiGeneHash[gene].length))];
+    for(var iA = 0; iA < acti.inputGenotypes.length; iA++){
+      if(!genoHash[acti.inputGenotypes[iA]._id] && !rsHash[acti.inputGenotypes[iA].snpRS]){
+        genoHash[acti.inputGenotypes[iA]._id] = true;
+        rsHash[acti.inputGenotypes[iA].snpRS] = true;
+        genotypes.push(acti.inputGenotypes[iA]);
+      }
+    }
+  }
+  console.log("Number of Genotypes after actitype filter : " + genotypes.length);
+  //Insert Bioinformatic calls (like phenotypes)
+  getBioinformaticCalls(genotypes, function(newGenotypes){
+    console.log("Number of Genotypes with bioinformatic calls : " + newGenotypes.length);
+    callback(newGenotypes);
+  });
+};
+
 var createRandomGenotypes = module.exports.createRandomGenotypes = function(callback){
   var genotypes = [];
   for(var snp in hashOfSNPs){
@@ -210,8 +257,8 @@ var createRandomGenotypes = module.exports.createRandomGenotypes = function(call
 
 var createRandomPatient = module.exports.createRandomPatient = function(info, callback){
   var patient = new models.patients({name : info.name, birthday : info.birthday, gender : info.gender});
-  createRandomGenotypes(function(newGenotypes){
-    patient.genotypes = newGenotypes;
+  createRandomGenotypesFromTriggers(function(theGenotypes){
+    patient.genotypes = theGenotypes;
 
     computeRecommendations(patient, function(locals){
       patient.nutrigenomics = locals.RecommendationNQx;

@@ -44,14 +44,14 @@ const createUpdaterFromBody = function(req, res){
   return updater;
 }
 
-const createPopulates = function(schema){
+const createPopulates = function(schema, view){
   var populates = [];
-  // if(schema["obj"]){
-  //   for(var property in schema["obj"]){
-  //     if(schema["obj"][property] && schema["obj"][property].ref)
-  //       populates.push(property);
-  //   }
-  // }
+  if(view && schema["obj"]){
+    for(var property in schema["obj"]){
+      if(schema["obj"][property] && schema["obj"][property].ref)
+        populates.push(property);
+    }
+  }
   return populates;
 }
 
@@ -72,9 +72,8 @@ var createRouter = function(modelName, model, writable, viewMode){
 
   //List all documents
   router.get("/",    (req,res) => {
-    console.log("GET : " + theModelName);
     var filters = createFilterFromParam(req, res);
-    var populates = [];//createPopulates(theModel.schema);
+    var populates = createPopulates(theModel.schema, view);
     theModel.find(filters).limit(limit).populate(populates).select(Object.keys(theModel.schema.paths)).lean().exec(function(err, documents) {
       if (err)
         res.send(err);
@@ -85,7 +84,7 @@ var createRouter = function(modelName, model, writable, viewMode){
 
   // Fetch specific document
   router.get('/:_id', (req,res) => {
-    var populates = createPopulates(theModel.schema);
+    var populates = createPopulates(theModel.schema, view);
     theModel.findById(req.params._id).populate(populates).select(Object.keys(theModel.schema.paths)).lean().exec(function(err, document) {
       if (err)
         res.send(err);
@@ -96,7 +95,7 @@ var createRouter = function(modelName, model, writable, viewMode){
 
   // Fetch specific document and return a specific property
   router.get('/:_id/:_property', (req,res) => {
-    var populates = createPopulates(theModel.schema);
+    var populates = createPopulates(theModel.schema, view);
     theModel.findById(req.params._id).populate(populates).select(Object.keys(theModel.schema.paths)).lean().exec(function(err, document) {
       if (err)
         res.send(err);
