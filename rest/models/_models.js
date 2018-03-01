@@ -6,6 +6,8 @@ const models = {
   diplotypes : require('./Diplotype.js'),
   polymorphisms : require('./Polymorphism.js'),
   genotypes : require('./Genotype.js'),
+  inputGenotypes : require('./Genotype.js'),
+  outputGenotypes : require('./Genotype.js'),
   actitypes : require('./ActiType.js'),
   activations : require('./ActiType.js'),
   bioinformatics : require('./Trigger.js'),

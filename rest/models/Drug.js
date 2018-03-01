@@ -7,8 +7,7 @@ const DrugSchema = mongoose.Schema({
   drugName:	{ type: String, required: false, initial:true },
   label_fr:	{ type: String, required: false, initial:true },
   relatedGenes: [{ type: Types.ObjectId, ref: 'Gene', required: false, initial:true, many: true}],
-  premiseClient: { type: String, wysiwyg:true, required: false , initial:false, html:true},
-  premiseClinician: { type: String, wysiwyg:true, required: false , initial:false, html: true}
+  premiseClient: { type: String, wysiwyg:true, required: false , initial:false, html:true}
 },{
   strict: true,
   strictQuery: true // Turn on strict mode for query filters

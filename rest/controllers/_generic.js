@@ -63,12 +63,12 @@ var createRouter = function(modelName, model, writable, viewMode){
   var view = viewMode;
   var limit = (view ? 100 : null);
 
-  var sendResponse = function(req, res, name, document, view){
+  var sendResponse = function(req, res, name, document, view, template){
     if(view){
-      if (!(document instanceof Array))
-        res.render('json', {json : document, name : name, schema : theModel.schema});
-      else
-        res.render('table', {json : document, name : name, schema : theModel.schema});
+      // if (!(document instanceof Array))
+        res.render(template, {json : document, name : name, schema : theModel.schema});
+      // else
+      //   res.render('table', {json : document, name : name, schema : theModel.schema});
     }
     else
       res.json(document);
@@ -82,7 +82,7 @@ var createRouter = function(modelName, model, writable, viewMode){
       if (err)
         res.send(err);
       else
-        sendResponse(req, res, theModelName, documents, view);
+        sendResponse(req, res, theModelName, documents, view, 'table');
     });
   });
 
@@ -93,7 +93,7 @@ var createRouter = function(modelName, model, writable, viewMode){
       if (err)
         res.send(err);
       else
-        sendResponse(req, res, theModelName, document, view);
+        sendResponse(req, res, theModelName, document, view, 'json');
     });
   });
 
@@ -105,9 +105,9 @@ var createRouter = function(modelName, model, writable, viewMode){
         res.send(err);
       else{
         if(document && req.params._property)
-          sendResponse(req, res, theModelName, document[req.params._property], view);
+          sendResponse(req, res, theModelName, document[req.params._property], view, 'property');
         else
-          sendResponse(req, res, theModelName, {}, view);
+          sendResponse(req, res, theModelName, {}, view, 'property');
       }
     });
   });
@@ -137,7 +137,7 @@ var createRouter = function(modelName, model, writable, viewMode){
         if (err)
           res.send(err);
         else
-          sendResponse(req, res, theModelName, documents, view);
+          sendResponse(req, res, theModelName, documents, view, 'table');
       });
     });
   }

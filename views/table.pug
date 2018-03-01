@@ -28,7 +28,10 @@ block content
                 if !(document[propertyName] instanceof Array)
                   if document[propertyName]
                     if !(document[propertyName]._id)
-                      td!= document[propertyName]
+                      if document[propertyName].length > 100
+                        td!= document[propertyName].substring(0,99)+"..."
+                      else
+                        td!= document[propertyName]
                     else
                       - var propName = document.code;
                       if !propName
