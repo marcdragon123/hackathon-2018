@@ -48,6 +48,7 @@ console.log("Adding template engine .... ");
 app.set('view engine', 'pug')
 console.log("Adding custom controller .... ");
 app.use('/', require('./rest/controllers/home').create(displayedModels));
+app.use('/admin/remove/properties/', require('./rest/controllers/propertyRemoval').create(displayedModels));
 
 
 //Lets launch the service!

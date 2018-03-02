@@ -15,7 +15,7 @@ mixin properties(document, schema, name)
     .card-body
       ul.list-group.list-group-flush
         //each property, propertyName in document
-        each stuff, propertyName in schema.paths
+        each stuff, propertyName in document
           if propertyName != "name" && propertyName != "__v"                        
             li.list-group-item
               .row

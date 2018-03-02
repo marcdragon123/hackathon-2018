@@ -11,8 +11,8 @@ const TriggerSchema = mongoose.Schema({
   count: { type: Number, required: false, initial:false, default: 0 },
   isApproved: { type: Boolean, required: false, initial:true, noedit:true },
 },{
-  strict: true,
-  strictQuery: true // Turn on strict mode for query filters
+  strict: false,
+  strictQuery: false // Turn on strict mode for query filters
 });
 
 module.exports = mongoose.model('Trigger', TriggerSchema);

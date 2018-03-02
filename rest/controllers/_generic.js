@@ -1,24 +1,5 @@
 var express = require('express');
 
-//Generic function used both to create or update document
-const updateAndSave = function(req, res, name, document, view){
-  //cycle through body content to add properties
-  for(var property in req.body){
-    // console.log("Property : " + property + "(" + req.body[property] + ")");
-    document[property] = req.body[property];
-  }
-
-  // save the new document and check for errors
-  document.save(function(err) {
-    if (err)
-      res.send(err);
-    if(view)
-      res.render('json', {json : { message: "OK", document: document }, name : name, schema : {}});
-    else
-      res.json(document);
-  });
-}
-
 const createFilterFromParam = function(req, res){
 
   var filters = [];
@@ -66,7 +47,7 @@ var createRouter = function(modelName, model, writable, viewMode){
   var sendResponse = function(req, res, name, document, view, template){
     if(view){
       // if (!(document instanceof Array))
-        res.render(template, {json : document, name : name, schema : theModel.schema});
+        res.render(template, {json : document, name : name, schema : theModel.schema });
       // else
       //   res.render('table', {json : document, name : name, schema : theModel.schema});
     }
@@ -74,11 +55,37 @@ var createRouter = function(modelName, model, writable, viewMode){
       res.json(document);
   }
 
+  //Generic function used both to create or update document
+  var updateAndSave = function(req, res, name, document, view, template){
+    //cycle through body content to add properties
+    var toUpdate = {};
+    for(var property in req.body){
+      // console.log("Property : " + property + "(" + req.body[property] + ")");
+      toUpdate[property] = req.body[property];
+    }
+
+    // save the new document and check for errors
+    // theModel.update(filters, { $set: createUpdaterFromBody(req, res)}, {multi: true}, function(err, documents) {
+    theModel.update({_id : document._id}, {$set: toUpdate}, {strict : false}, function(err) {
+      if (err)
+        res.send(err);
+      else{
+        sendResponse(req, res, name, toUpdate, view, template);
+        // if(view)
+        //   res.render(template, {json : document, name : name, schema : theModel.schema});
+        // else
+        //   res.json(document);
+      }
+    });
+  }
+
+
   //List all documents
   router.get("/",    (req,res) => {
     var filters = createFilterFromParam(req, res);
     var populates = createPopulates(theModel.schema, view);
-    theModel.find(filters).limit(limit).populate(populates).select(Object.keys(theModel.schema.paths)).lean().exec(function(err, documents) {
+    //.select(Object.keys(theModel.schema.paths)).
+    theModel.find(filters).limit(limit).populate(populates).exec(function(err, documents) {
       if (err)
         res.send(err);
       else
@@ -89,7 +96,7 @@ var createRouter = function(modelName, model, writable, viewMode){
   // Fetch specific document
   router.get('/:_id', (req,res) => {
     var populates = createPopulates(theModel.schema, view);
-    theModel.findById(req.params._id).populate(populates).select(Object.keys(theModel.schema.paths)).lean().exec(function(err, document) {
+    theModel.findById(req.params._id).populate(populates).lean().exec(function(err, document) {
       if (err)
         res.send(err);
       else
@@ -100,7 +107,7 @@ var createRouter = function(modelName, model, writable, viewMode){
   // Fetch specific document and return a specific property
   router.get('/:_id/:_property', (req,res) => {
     var populates = createPopulates(theModel.schema, view);
-    theModel.findById(req.params._id).populate(populates).select(Object.keys(theModel.schema.paths)).lean().exec(function(err, document) {
+    theModel.findById(req.params._id).populate(populates).lean().exec(function(err, document) {
       if (err)
         res.send(err);
       else{
@@ -116,7 +123,7 @@ var createRouter = function(modelName, model, writable, viewMode){
     // Create a new item
     router.post('/',(req,res) => {
       var document = new theModel();      // create a new instance of the model
-      updateAndSave(req, res, theModelName, document, view);
+      updateAndSave(req, res, theModelName, document, view, 'property');
     });
 
 
@@ -126,7 +133,7 @@ var createRouter = function(modelName, model, writable, viewMode){
         if (err)
           res.send(err);
 
-        updateAndSave(req, res, theModelName, document, view);
+        updateAndSave(req, res, theModelName, document, view, 'json');
       });
     });
 

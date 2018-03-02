@@ -9,8 +9,8 @@ const ActiTypeSchema = mongoose.Schema({
   texte	: { type: String, required: false, initial:true },
   count: { type: Number, required: false, initial:false, default: 0 }
 },{
-  strict: true,
-  strictQuery: true // Turn on strict mode for query filters
+  strict: false,
+  strictQuery: false // Turn on strict mode for query filters
 });
 
 module.exports = mongoose.model('ActiType', ActiTypeSchema);

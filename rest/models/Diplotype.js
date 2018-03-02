@@ -6,8 +6,8 @@ const DiplotypeSchema = mongoose.Schema({
     activityScore: { type: String, required: false, initial:true },
     notes: { type: String, required: false, initial:true }
 },{
-  strict: true,
-  strictQuery: true // Turn on strict mode for query filters
+  strict: false,
+  strictQuery: false // Turn on strict mode for query filters
 });
 
 module.exports = mongoose.model('Diplotype', DiplotypeSchema);

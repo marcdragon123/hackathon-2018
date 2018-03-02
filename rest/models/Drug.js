@@ -9,8 +9,8 @@ const DrugSchema = mongoose.Schema({
   relatedGenes: [{ type: Types.ObjectId, ref: 'Gene', required: false, initial:true, many: true}],
   premiseClient: { type: String, wysiwyg:true, required: false , initial:false, html:true}
 },{
-  strict: true,
-  strictQuery: true // Turn on strict mode for query filters
+  strict: false,
+  strictQuery: false // Turn on strict mode for query filters
 });
 
 module.exports = mongoose.model('Drug', DrugSchema);

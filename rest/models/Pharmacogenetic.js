@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Types = mongoose.Schema.Types;
 
-const RNQxSchema = mongoose.Schema({
+const RPQxSchema = mongoose.Schema({
   code: { type: String, required: false, initial:false },
   activations:[{ type: Types.ObjectId, ref: 'ActiType', required: true, initial:true, many:true }],
   applicableSex: { type: String, options: 'Male, Female, Both', required: true, initial:true, default: 'Both'},
@@ -10,12 +10,12 @@ const RNQxSchema = mongoose.Schema({
   recommendationClient: { type: String, html:true, wysiwyg:true, required: false, initial:false },
   riskNumClient: 	{ type: Types.Number, required: true, initial:true, default:1 },
   rankInsideRiskNum: 	{ type: Types.Number, required: false, initial:true, default:10 },
-  // categories:{ type: Types.ObjectId, ref: 'Category', required: true, initial:true, many:true },
+  // categories:{ type: Types.Relationship, ref: 'Category', required: true, initial:true, many:true },
   count: { type: Number, required: false, initial:false, default: 0 },
-  nutriment: { type: Types.ObjectId, ref: 'Nutriment', required: true, initial:true },
+  drug: { type: Types.ObjectId, ref: 'Drug', required: true, initial:true },
 },{
-  strict: true,
-  strictQuery: true // Turn on strict mode for query filters
+  strict: false,
+  strictQuery: false // Turn on strict mode for query filters
 });
 
-module.exports = mongoose.model('RecommendationNQx', RNQxSchema);
+module.exports = mongoose.model('RecommendationPQx', RPQxSchema);

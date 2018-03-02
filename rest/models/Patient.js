@@ -9,8 +9,8 @@ const PatientSchema = mongoose.Schema({
   nutrigenomics: [{ type: Types.ObjectId, ref: 'RecommendationNQx', required: false, initial:true }],
   pharmacogenetics: [{ type: Types.ObjectId, ref: 'RecommendationPQx', required: false, initial:true }],
 },{
-  strict: true,
-  strictQuery: true // Turn on strict mode for query filters
+  strict: false,
+  strictQuery: false // Turn on strict mode for query filters
 });
 
 module.exports = mongoose.model('Patient', PatientSchema);

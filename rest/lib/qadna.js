@@ -223,9 +223,10 @@ var createRandomGenotypesFromTriggers = module.exports.createRandomGenotypesFrom
   for(var gene in actiGeneHash){
     var acti = actiGeneHash[gene][Math.floor((Math.random() * actiGeneHash[gene].length))];
     for(var iA = 0; iA < acti.inputGenotypes.length; iA++){
-      if(!genoHash[acti.inputGenotypes[iA]._id] && !rsHash[acti.inputGenotypes[iA].snpRS]){
+      if(!genoHash[acti.inputGenotypes[iA]._id] && (!acti.inputGenotypes[iA].snpRS || !rsHash[acti.inputGenotypes[iA].snpRS])){
         genoHash[acti.inputGenotypes[iA]._id] = true;
-        rsHash[acti.inputGenotypes[iA].snpRS] = true;
+        if(acti.inputGenotypes[iA].snpRS)
+          rsHash[acti.inputGenotypes[iA].snpRS] = true;
         genotypes.push(acti.inputGenotypes[iA]);
       }
     }
