@@ -6,13 +6,13 @@ var models              = require('../models/_models'); // Loading all models
 var create = function(models){
   var router = express.Router();
 
-  router.get('/',(req,res) => {
-    db_admin.unsetPropertiesForModel(models.nutriments, function(err){
-      if(err)
-        res.send(err);
-      res.render('landing', {models : models});
-    })
-  });
+  // router.get('/',(req,res) => {
+  //   db_admin.unsetPropertiesForModel(models.nutriments, function(err){
+  //     if(err)
+  //       res.send(err);
+  //     res.render('landing', {models : models});
+  //   })
+  // });
 
   // Update an item
   router.get('/:_model',(req,res) => {

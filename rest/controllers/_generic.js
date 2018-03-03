@@ -45,12 +45,8 @@ var createRouter = function(modelName, model, writable, viewMode){
   var limit = (view ? 100 : null);
 
   var sendResponse = function(req, res, name, document, view, template){
-    if(view){
-      // if (!(document instanceof Array))
-        res.render(template, {json : document, name : name, schema : theModel.schema });
-      // else
-      //   res.render('table', {json : document, name : name, schema : theModel.schema});
-    }
+    if(view)
+      res.render(template, {json : document, name : name, schema : theModel.schema });
     else
       res.json(document);
   }
@@ -60,21 +56,15 @@ var createRouter = function(modelName, model, writable, viewMode){
     //cycle through body content to add properties
     var toUpdate = {};
     for(var property in req.body){
-      // console.log("Property : " + property + "(" + req.body[property] + ")");
       toUpdate[property] = req.body[property];
     }
 
     // save the new document and check for errors
-    // theModel.update(filters, { $set: createUpdaterFromBody(req, res)}, {multi: true}, function(err, documents) {
     theModel.update({_id : document._id}, {$set: toUpdate}, {strict : false}, function(err) {
       if (err)
         res.send(err);
       else{
         sendResponse(req, res, name, toUpdate, view, template);
-        // if(view)
-        //   res.render(template, {json : document, name : name, schema : theModel.schema});
-        // else
-        //   res.json(document);
       }
     });
   }
@@ -107,7 +97,7 @@ var createRouter = function(modelName, model, writable, viewMode){
   // Fetch specific document and return a specific property
   router.get('/:_id/:_property', (req,res) => {
     var populates = createPopulates(theModel.schema, view);
-    theModel.findById(req.params._id).populate(populates).lean().exec(function(err, document) {
+    theModel.findById(req.params._id).populate(populates).select(req.params._property).lean().exec(function(err, document) {
       if (err)
         res.send(err);
       else{
