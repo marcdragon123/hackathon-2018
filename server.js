@@ -50,6 +50,8 @@ console.log("Adding custom controller .... ");
 app.use('/', require('./rest/controllers/home').create(displayedModels));
 app.use('/admin/remove/properties/', require('./rest/controllers/propertyRemoval').create(displayedModels));
 
+app.use('/admin/add/polymorphism/', require('./rest/controllers/snpInsertion').create(displayedModels));
+
 
 //Lets launch the service!
 app.listen(process.env.PORT || 5000, () => {

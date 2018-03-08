@@ -166,6 +166,7 @@ var computeRecommendations = module.exports.computeRecommendations = function(pa
 };
 
 var panels              = require('./panels');
+var phenotypes          = require('./phenotypes');
 var models              = require('../models/_models'); // Loading all models
 
 //prepare hashOfSNPs for panels
@@ -266,12 +267,17 @@ var createRandomPatient = module.exports.createRandomPatient = function(info, ca
       patient.pharmacogenetics = locals.RecommendationPQx;
 
       console.log("Patient to be saved : " + patient.name + "(" + patient.genotypes.length + " - " + patient.pharmacogenetics.length + "-" + patient.nutrigenomics.length);
-      patient.save(function(err, document){
-        if(err)
-          console.log("Could not save patient : " + err);
-        console.log("Patient saved : " + document.name);
-        callback(patient);
-      });
+
+      //Add Random Phenotypes
+      var documents = phenotypes.getRandomPhenotypes(5);
+      console.log("phenotypes : " + JSON.stringify(documents, undefined, "  "));
+      callback(patient);
+      // patient.save(function(err, document){
+      //   if(err)
+      //     console.log("Could not save patient : " + err);
+      //   console.log("Patient saved : " + document.name);
+      //   callback(patient);
+      // });
     });
   });
 }

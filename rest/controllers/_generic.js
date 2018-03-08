@@ -137,6 +137,16 @@ var createRouter = function(modelName, model, writable, viewMode){
           sendResponse(req, res, theModelName, documents, view, 'table');
       });
     });
+
+    // Update an item
+    router.delete('/:_id',(req,res) => {
+      theModel.findByIdAndRemove(req.params._id, function(err) {
+        if (err)
+          res.send(err);
+
+        updateAndSave(req, res, theModelName, {message : "Document removed!"}, view, 'json');
+      });
+    });
   }
   return router;
 }
