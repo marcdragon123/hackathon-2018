@@ -9,15 +9,27 @@ var create = function(models){
     res.render('landing', {models : models});
   });
 
+  var callBackRecaller = function(req, res, nbTODOs){
+    qadna.createRandomPatient({}, function(patient){
+      if(nbTODOs > 0)
+        callBackRecaller(req, res, nbTODOs - 1);
+      else{
+        res.render('json', {json : patient, name : "Multiple", schema : models.patients.schema});
+        console.log("Created all patients");
+      }
+    });
+  }
+
   router.post('/createFiveThousandPatients',(req,res) => {
 
-    for(var ideux = 1; ideux < 50; ideux++){
-      qadna.createRandomPatient({}, function(patient){});
-    }
-
-    qadna.createRandomPatient({}, function(patient){
-      res.render('json', {json : patient, name : patient.name, schema : models.patients.schema});
-    });
+    callBackRecaller(req, res, 500);
+    // for(var ideux = 1; ideux < 50; ideux++){
+    //   qadna.createRandomPatient({}, function(patient){});
+    // }
+    //
+    // qadna.createRandomPatient({}, function(patient){
+    //   res.render('json', {json : patient, name : patient.name, schema : models.patients.schema});
+    // });
   });
 
   router.post('/createRandomPatient',(req,res) => {

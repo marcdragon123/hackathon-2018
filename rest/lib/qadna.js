@@ -177,6 +177,7 @@ for(var i = 0; i < concat.length; i++){
 }
 
 var phenotypes          = require('./phenotypes_fromDB');
+var genotyper           = require('./genotypes_fromGenotypes');
 var models              = require('../models/_models'); // Loading all models
 
 //prepare hashOfSNPs for panels
@@ -281,8 +282,10 @@ var createRandomPatient = module.exports.createRandomPatient = function(info, ca
 
   var patient = new models.patients(info);
   createRandomGenotypesFromTriggers(function(theGenotypes){
-    patient.genotypes = theGenotypes;
-
+    var indexG = theGenotypes.length;
+    patient.genotypes = genotyper.AddMissingGenotypes(hashOfSNPs, theGenotypes);
+    console.log("added " + (patient.genotypes.length - indexG) + " genotypes ");
+    //#TODO Insert missing genotype SNPs (SNPs not associated to a trigger)
     computeRecommendations(patient, function(locals){
       patient.nutrigenomics = locals.RecommendationNQx;
       patient.pharmacogenetics = locals.RecommendationPQx;
@@ -292,7 +295,7 @@ var createRandomPatient = module.exports.createRandomPatient = function(info, ca
       //Add Random Phenotypes
       patient.phenotypes = phenotypes.getRandomPhenotypes(50);
 
-      // console.log("phenotypes : " + JSON.stringify(patient.phenotypes, undefined, "  "));
+      // // console.log("phenotypes : " + JSON.stringify(patient.phenotypes, undefined, "  "));
       // callback(patient);
       patient.save(function(err, document){
         if(err)

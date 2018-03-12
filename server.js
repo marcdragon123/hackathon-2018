@@ -52,8 +52,14 @@ console.log("Adding custom controller .... ");
 app.use('/', require('./rest/controllers/home').create(displayedModels));
 app.use('/admin/remove/properties/', require('./rest/controllers/propertyRemoval').create(displayedModels));
 
+//Ajoute un SNP dans la base de donnée à partir de OpenSNP.org
 app.use('/admin/add/polymorphism/', require('./rest/controllers/snpInsertion').create(displayedModels));
 
+// Ajouter les GENOTYPES (aléatoirement) correspondant à de nouveaux polymorphismes (dans panel.js)
+// var genotyper = require("./rest/lib/genotypes_fromSNPs");
+// genotyper.AddMissingGenotypes();
+
+// Ajouter la liste des phenotypes, provenance de OpenSNP.org
 // var phenoJson = require("./rest/lib/phenotypes");
 // phenoJson.saveAllPhenotypes(function(){
 //   console.log("All phenotypes saved");
