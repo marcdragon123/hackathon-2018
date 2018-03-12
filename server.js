@@ -1,4 +1,5 @@
 var express     = require('express');
+var csv         = require('csv-express')
 var cors        = require('cors');
 var bodyParser  = require('body-parser');
 
@@ -40,8 +41,9 @@ for(var model in models){
   if(displayedModels[model])
     displayedModels[model] = models[model];
   console.log("Registering model : " + model); //Register routes
-  app.use("/json/"+model+"/", genericControllers.createRouter(model, models[model], writable, false));
-  app.use("/html/"+model+"/", genericControllers.createRouter(model, models[model], writable, true));
+  app.use("/json/"+model+"/", genericControllers.createRouter(model, models[model], writable, "json"));
+  app.use("/csv/"+model+"/", genericControllers.createRouter(model, models[model], writable, "csv"));
+  app.use("/html/"+model+"/", genericControllers.createRouter(model, models[model], writable, "html"));
 }
 
 console.log("Adding template engine .... ");
@@ -52,7 +54,10 @@ app.use('/admin/remove/properties/', require('./rest/controllers/propertyRemoval
 
 app.use('/admin/add/polymorphism/', require('./rest/controllers/snpInsertion').create(displayedModels));
 
-
+// var phenoJson = require("./rest/lib/phenotypes");
+// phenoJson.saveAllPhenotypes(function(){
+//   console.log("All phenotypes saved");
+// })
 //Lets launch the service!
 app.listen(process.env.PORT || 5000, () => {
   console.log('------ Server is running on port 5000! ------');

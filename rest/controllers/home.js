@@ -9,6 +9,17 @@ var create = function(models){
     res.render('landing', {models : models});
   });
 
+  router.post('/createFiveThousandPatients',(req,res) => {
+
+    for(var ideux = 1; ideux < 50; ideux++){
+      qadna.createRandomPatient({}, function(patient){});
+    }
+
+    qadna.createRandomPatient({}, function(patient){
+      res.render('json', {json : patient, name : patient.name, schema : models.patients.schema});
+    });
+  });
+
   router.post('/createRandomPatient',(req,res) => {
     //patient info : name, birth, gender
     var info = {};

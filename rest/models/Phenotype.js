@@ -7,7 +7,8 @@ const PhenotypeSchema = mongoose.Schema({
   texte	: { type: String, required: false, initial:true },
   texte_fr_client	: { type: String, required: false, initial:true },
   activityScore: { type: Number, required: false, initial:true },
-  notes: { type: String, required: false, initial:true }
+  notes: { type: String, required: false, initial:true },
+  characteristic: { type: String, required: false, initial:true }
 },{
   strict: false,
   strictQuery: false // Turn on strict mode for query filters

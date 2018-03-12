@@ -27,7 +27,7 @@ const createUpdaterFromBody = function(req, res){
 
 const createPopulates = function(schema, view){
   var populates = [];
-  if(view && schema["obj"]){
+  if(view == "html" && schema["obj"]){
     for(var property in schema["obj"]){
       if(schema["obj"][property] && schema["obj"][property].ref)
         populates.push(property);
@@ -42,13 +42,20 @@ var createRouter = function(modelName, model, writable, viewMode){
   var theModel = model;
   var theModelName = modelName;
   var view = viewMode;
-  var limit = (view ? 100 : null);
+  var limit = (view == "html" ? 100 : null);
 
   var sendResponse = function(req, res, name, document, view, template){
-    if(view)
-      res.render(template, {json : document, name : name, schema : theModel.schema });
-    else
-      res.json(document);
+    switch(view){
+      case "html":
+        res.render(template, {json : document, name : name, schema : theModel.schema });
+        break;
+      case "json":
+        res.json(document);
+        break;
+      case "csv":
+        res.csv(document, true);
+        break;
+      }
   }
 
   //Generic function used both to create or update document
@@ -75,7 +82,7 @@ var createRouter = function(modelName, model, writable, viewMode){
     var filters = createFilterFromParam(req, res);
     var populates = createPopulates(theModel.schema, view);
     //.select(Object.keys(theModel.schema.paths)).
-    theModel.find(filters).limit(limit).populate(populates).exec(function(err, documents) {
+    theModel.find(filters).limit(limit).populate(populates).lean().exec(function(err, documents) {
       if (err)
         res.send(err);
       else
@@ -138,7 +145,7 @@ var createRouter = function(modelName, model, writable, viewMode){
       });
     });
 
-    // Update an item
+    // Delete an item
     router.delete('/:_id',(req,res) => {
       theModel.findByIdAndRemove(req.params._id, function(err) {
         if (err)

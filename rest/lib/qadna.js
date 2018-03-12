@@ -166,12 +166,22 @@ var computeRecommendations = module.exports.computeRecommendations = function(pa
 };
 
 var panels              = require('./panels');
-var phenotypes          = require('./phenotypes');
+var hashSNPs = {};
+var AllSNPS = [];
+var concat = panels.SNPS.concat(panels.NQX).concat(panels.PGX_PRO);
+for(var i = 0; i < concat.length; i++){
+  if(!hashSNPs[concat[i]]){
+    hashSNPs[concat[i]] = true;
+    AllSNPS.push(concat[i]);
+  }
+}
+
+var phenotypes          = require('./phenotypes_fromDB');
 var models              = require('../models/_models'); // Loading all models
 
 //prepare hashOfSNPs for panels
 var hashOfSNPs = {};
-models.genotypes.find({$and : [{snpRS : {$in : panels.PGX_PRO}}, {count : {$gt : 1}}]}).exec(function(err, documents){
+models.genotypes.find({$and : [{snpRS : {$in : AllSNPS}}, {count : {$gt : 1}}]}).exec(function(err, documents){
   hashOfSNPs = {};
   for(var i = 0; i < documents.length; i++){
     if(!hashOfSNPs[documents[i].snpRS])
@@ -257,8 +267,19 @@ var createRandomGenotypes = module.exports.createRandomGenotypes = function(call
   });
 }
 
+var random_name = require('node-random-name');
 var createRandomPatient = module.exports.createRandomPatient = function(info, callback){
-  var patient = new models.patients({name : info.name, birthday : info.birthday, gender : info.gender});
+  var fakeGender = "male";
+  if(Math.random() > 0.5)
+    fakeGender = "female";
+  if(!info.gender)
+    info.gender = fakeGender;
+
+  var fakeName = random_name({ gender: info.gender});
+  if(!info.name)
+    info.name = fakeName;
+
+  var patient = new models.patients(info);
   createRandomGenotypesFromTriggers(function(theGenotypes){
     patient.genotypes = theGenotypes;
 
@@ -269,15 +290,16 @@ var createRandomPatient = module.exports.createRandomPatient = function(info, ca
       console.log("Patient to be saved : " + patient.name + "(" + patient.genotypes.length + " - " + patient.pharmacogenetics.length + "-" + patient.nutrigenomics.length);
 
       //Add Random Phenotypes
-      var documents = phenotypes.getRandomPhenotypes(5);
-      console.log("phenotypes : " + JSON.stringify(documents, undefined, "  "));
-      callback(patient);
-      // patient.save(function(err, document){
-      //   if(err)
-      //     console.log("Could not save patient : " + err);
-      //   console.log("Patient saved : " + document.name);
-      //   callback(patient);
-      // });
+      patient.phenotypes = phenotypes.getRandomPhenotypes(50);
+
+      // console.log("phenotypes : " + JSON.stringify(patient.phenotypes, undefined, "  "));
+      // callback(patient);
+      patient.save(function(err, document){
+        if(err)
+          console.log("Could not save patient : " + err);
+        console.log("Patient saved : " + document.name);
+        callback(patient);
+      });
     });
   });
 }

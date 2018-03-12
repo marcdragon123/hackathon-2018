@@ -7,8 +7,8 @@ block content
   div.container-fluid
     .card-deck.mb-3.text-center
       each model, modelName in models
-        .col-md-4.accordion        
-          .card.md-4.box-shadow
+        .col-md-6.accordion        
+          .card.md-6.box-shadow
             .card-header   
               .row
                 .col-md-7
@@ -19,7 +19,10 @@ block content
                     a(href='/html/'+modelName, style="color:darkblue") html
                   span 
                   button.btn.btn-md.btn-body.btn-primary(type="button")
-                    a(href='/json/'+modelName, style="color:white") json            
+                    a(href='/json/'+modelName, style="color:white") json     
+                  span 
+                  button.btn.btn-md.btn-body.btn-primary(type="button")
+                    a(href='/csv/'+modelName, style="color:white") csv          
             div.collapse(id=modelName, aria-labelledby=modelName data-parent="#accordion")              
               .card-body
                 ul.list-unstyled.mt-3.mb-4
