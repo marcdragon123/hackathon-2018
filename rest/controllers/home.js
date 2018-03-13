@@ -21,15 +21,7 @@ var create = function(models){
   }
 
   router.post('/createFiveThousandPatients',(req,res) => {
-
     callBackRecaller(req, res, 500);
-    // for(var ideux = 1; ideux < 50; ideux++){
-    //   qadna.createRandomPatient({}, function(patient){});
-    // }
-    //
-    // qadna.createRandomPatient({}, function(patient){
-    //   res.render('json', {json : patient, name : patient.name, schema : models.patients.schema});
-    // });
   });
 
   router.post('/createRandomPatient',(req,res) => {

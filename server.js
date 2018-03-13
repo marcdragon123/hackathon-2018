@@ -7,7 +7,13 @@ var app         = express(); // Please do not remove this line, since CLI uses t
 app.use(cors());
 
 var mongoose    = require('mongoose');
-mongoose.connect("mongodb://localhost:27017/bonqoeur"); // connect to our database hackathon2018
+var args = "bonqoeur";
+process.argv.forEach(function (val, index, array) {
+  if(index == 2)
+    args = val;
+});
+console.log("Connecting to database : " + args);
+mongoose.connect("mongodb://localhost:27017/"+args); // connect to our database hackathon2018
 
 var models              = require('./rest/models/_models'); // Loading all models
 var genericControllers  = require('./rest/controllers/_generic'); // A tool to automate routes for each model
