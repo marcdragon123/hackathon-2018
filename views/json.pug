@@ -24,3 +24,11 @@ block content
           .card-block                  
             pre
               code.json= JSON.stringify(schema, null, '  ')
+              
+    .accordion
+      .card
+        .card-header
+        div.collapse(id="bottle", aria-labelledby="bottle" data-parent="#accordion")
+          .card-block                  
+            pre
+              code.json= JSON.stringify({bottle_id : "h0sng41"}, null, '  ')
