@@ -6,7 +6,11 @@ const createFilterFromParam = function(req, res){
   for(var property in req.query){
     if(property && req.query[property]){
       var newFilter = {};
-      newFilter[property] = req.query[property];
+      if(req.query[property].length == 24)
+        newFilter[property] = req.query[property];//Exact match or array contains
+      else
+        newFilter[property] = { "$regex": req.query[property], "$options": "i" };//contains
+      // newFilter[property] = req.query[property];
       filters.push(newFilter);
     }
   }
