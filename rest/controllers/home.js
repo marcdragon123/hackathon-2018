@@ -2,11 +2,11 @@
 var express = require('express');
 var qadna   = require('../lib/qadna');
 
-var create = function(models){
+var create = function(models, modelsInfo) {
   var router = express.Router();
 
   router.get('/',(req,res) => {
-    res.render('landing', {models : models});
+    res.render('landing', {models: models, info: modelsInfo});
   });
 
   var callBackRecaller = function(req, res, nbTODOs){
