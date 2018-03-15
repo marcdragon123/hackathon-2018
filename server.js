@@ -2,10 +2,12 @@ require('dotenv').load();
 var express     = require('express');
 var csv         = require('csv-express')
 var cors        = require('cors');
+var logger      = require('morgan');
 var bodyParser  = require('body-parser');
 
 var app         = express(); // Please do not remove this line, since CLI uses this line as guidance to import new controllers
 app.use(cors());
+app.use(logger('[:date[iso]] :method :url :status :response-time ms - :res[content-length]'));
 
 var mongoose    = require('mongoose');
 var args = "bonqoeur";
@@ -58,6 +60,8 @@ var modelsInformation = {
   pharmacogenetics : "Modèle qui représente les différentes recommendations possibles pour un médicament spécifique.",
   nutrigenomics : "Modèle qui représente les différentes recommendations possibles pour un nutriment spécifique."
 };
+
+
 
 for(var model in models){
   if(displayedModels[model])
