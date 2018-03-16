@@ -2,7 +2,7 @@
 var express = require('express');
 var qadna   = require('../lib/qadna');
 
-var create = function(models){
+var create = function(models, writable){
   var router = express.Router();
 
   router.get('/',(req,res) => {
@@ -19,22 +19,23 @@ var create = function(models){
       }
     });
   }
-
-  router.post('/createFiveThousandPatients',(req,res) => {
-    callBackRecaller(req, res, 500);
-  });
-
-  router.post('/createRandomPatient',(req,res) => {
-    //patient info : name, birth, gender
-    var info = {};
-    //cycle through body content to add properties
-    for(var property in req.body){
-      info[property] = req.body[property];
-    }
-    qadna.createRandomPatient(info, function(patient){
-      res.render('json', {json : patient, name : patient.name, schema : models.patients.schema});
+  if(writable){
+    router.post('/createFiveThousandPatients',(req,res) => {
+      callBackRecaller(req, res, 500);
     });
-  });
+
+    router.post('/createRandomPatient',(req,res) => {
+      //patient info : name, birth, gender
+      var info = {};
+      //cycle through body content to add properties
+      for(var property in req.body){
+        info[property] = req.body[property];
+      }
+      qadna.createRandomPatient(info, function(patient){
+        res.render('json', {json : patient, name : patient.name, schema : models.patients.schema});
+      });
+    });
+  }
   return router;
 }
 
