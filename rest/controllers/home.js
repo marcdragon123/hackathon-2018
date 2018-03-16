@@ -2,11 +2,7 @@
 var express = require('express');
 var qadna   = require('../lib/qadna');
 
-<<<<<<< HEAD
-var create = function(models, writable){
-=======
-var create = function(models, modelsInfo) {
->>>>>>> c61c2524c536f5f873d5e5aa3e64f3efc9b7da7c
+var create = function(models, writable, modelsInfo) {
   var router = express.Router();
 
   router.get('/',(req,res) => {

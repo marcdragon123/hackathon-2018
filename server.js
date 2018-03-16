@@ -29,6 +29,7 @@ console.log("Launch sequence initiated .... ");
 console.log("Throwing in some middlewares .... ");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(express.static('public'))
 app.set('json spaces', 2);
 
 var displayedModels = {
@@ -75,7 +76,7 @@ for(var model in models){
 console.log("Adding template engine .... ");
 app.set('view engine', 'pug')
 console.log("Adding custom controller .... ");
-app.use('/', require('./rest/controllers/home').create(displayedModels, writable));
+app.use('/', require('./rest/controllers/home').create(displayedModels, writable, modelsInformation));
 if(writable){
   app.use('/admin/remove/properties/', require('./rest/controllers/propertyRemoval').create(displayedModels));
 
