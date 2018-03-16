@@ -4,31 +4,34 @@ block content
   div.pricing-header.px-3.py-3.pt-md-5.pb-md-4.mx-auto.text-center
     h1.display-6 BiogeniQ API : Hackathon 2018
     p.lead Vous naviguez présentement sur l'API de BiogeniQ. Trouverez-vous tous les éléments cachés?
+
   div.container-fluid
-    .card-deck.mb-3.text-center
+    .card-deck.mb-3
       each model, modelName in models
         .col-md-6.accordion        
-          .card.md-6.box-shadow
-            .card-header   
+          .card.md-6.box-shadow.m-2
+            .card-header  
               .row
-                .col-md-7
-                  h4.my-0.font-weight-normal= modelName  
-                    button.btn.btn-link(data-toggle="collapse" data-target="#"+modelName, aria-expanded="true", aria-controls=modelName) >>                        
+                .col-md-7.text-center
+                  h4.my-0.font-weight-normal.text-capitalize= modelName  
                 .col-md-5
                   a(href='/html/'+modelName, style="color:darkblue")
-                    button.btn.btn-md.btn-body.btn-outline-primary(type="button") html
+                    button.btn.btn-md.btn-body.btn-primary(type="button") html
                   span 
                   a(href='/json/'+modelName, style="color:white")
                     button.btn.btn-md.btn-body.btn-primary(type="button") json
                   span 
                   a(href='/csv/'+modelName, style="color:white")
                     button.btn.btn-md.btn-body.btn-primary(type="button") csv
-            div.collapse(id=modelName, aria-labelledby=modelName data-parent="#accordion")              
-              .card-body
-                ul.list-unstyled.mt-3.mb-4
-                  each property, propertyName in model.schema.paths
-                    if propertyName != "__v"
-                      li= propertyName
+                  button.btn.btn-link(data-toggle="collapse" data-target="#"+modelName, aria-expanded="true", aria-controls=modelName)!= ">>"                      
+            .card-body.collapse(id=modelName, aria-labelledby=modelName, data-parent="#accordion")
+              h4 En Bref
+              p #{info[modelName]}
+              h4 Liste des champs contenus
+              ul
+                each property, propertyName in model.schema.paths
+                  if propertyName != "__v"
+                    li #{propertyName}
             
     footer.pt-4.my-md-5.pt-md-5.border-top
             

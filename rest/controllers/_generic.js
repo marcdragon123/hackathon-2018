@@ -54,9 +54,13 @@ var createRouter = function(modelName, model, writable, viewMode){
         res.render(template, {json : document, name : name, schema : theModel.schema });
         break;
       case "json":
+        res.setHeader('Content-disposition', 'attachment; filename=' + name +'.json');
+        res.setHeader('Content-type', 'application/json');
         res.json(document);
         break;
       case "csv":
+        res.setHeader('Content-disposition', 'attachment; filename=' + name +'.csv');
+        res.setHeader('Content-type', 'application/csv');
         res.csv(document, true);
         break;
       }

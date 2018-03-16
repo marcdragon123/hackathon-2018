@@ -12,7 +12,7 @@ block content
             a(href="/json/"+modelName) json
             | )
             button.btn.btn-link(data-toggle="collapse" data-target="#"+modelName, aria-expanded="true", aria-controls=modelName) +
-          div.collapse(id=modelName, aria-labelledby=modelName data-parent="#accordion")
+          div.collapse(id=modelName, aria-labelledby=modelName, data-parent="#accordion")
             .card-block
               ul
                 each property, propertyName in model.schema.paths
