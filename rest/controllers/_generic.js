@@ -49,6 +49,9 @@ var createRouter = function(modelName, model, writable, viewMode){
   var limit = (view == "html" ? 100 : null);
 
   var sendResponse = function(req, res, name, document, view, template){
+    if(!document)
+      document = {};
+      
     switch(view){
       case "html":
         res.render(template, {json : document, name : name, schema : theModel.schema });
