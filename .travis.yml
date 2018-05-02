@@ -1,0 +1,7 @@
+before_install:
+  - sudo apt-get -qq update
+  - npm install
+
+langauge: node_js
+
+script: npm test
